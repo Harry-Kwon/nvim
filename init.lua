@@ -41,6 +41,8 @@ P.S. You can delete this when you're done too. It's your config now :)
 -- Set <space> as the leader key
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are required (otherwise wrong leader will be used)
+vim.cmd.source("~/.vimrc")
+
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
@@ -302,7 +304,7 @@ vim.wo.signcolumn = 'yes'
 
 -- Decrease update time
 vim.o.updatetime = 250
-vim.o.timeoutlen = 300
+vim.o.timeoutlen = 200
 
 -- Set completeopt to have a better completion experience
 vim.o.completeopt = 'menuone,noselect'
@@ -669,6 +671,7 @@ cmp.setup {
 
 require('custom')
 require('custom.remaps')
+require('custom.debug')
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
