@@ -19,6 +19,28 @@ return {
                     path = "~/notes",
                 }
             },
-        }
-    }
+        },
+        config = function()
+            require("obsidian").setup(
+                {
+                    ui = {
+                        enable = false
+                    }
+                }
+            )
+        end
+    },
+    {
+        "klen/nvim-test",
+        config = function()
+            require("nvim-test").setup();
+        end
+    },
+    {
+        "iamcco/markdown-preview.nvim",
+        cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
+        ft = { "markdown" },
+        build = function() vim.fn["mkdp#util#install"]() end,
+    },
+    'bullets-vim/bullets.vim'
 }
