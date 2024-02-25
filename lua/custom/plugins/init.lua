@@ -19,16 +19,10 @@ return {
                     path = "~/notes",
                 }
             },
+            ui = {
+                enable = false
+            }
         },
-        config = function()
-            require("obsidian").setup(
-                {
-                    ui = {
-                        enable = false
-                    }
-                }
-            )
-        end
     },
     {
         "klen/nvim-test",
@@ -42,5 +36,5 @@ return {
         ft = { "markdown" },
         build = function() vim.fn["mkdp#util#install"]() end,
     },
-    'bullets-vim/bullets.vim'
+    -- 'bullets-vim/bullets.vim',
 }

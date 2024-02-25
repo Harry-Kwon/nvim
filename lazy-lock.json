@@ -25,6 +25,7 @@
   "nvim-dap-vscode-js": { "branch": "main", "commit": "03bd29672d7fab5e515fc8469b7d07cc5994bbf6" },
   "nvim-lspconfig": { "branch": "master", "commit": "021906284dcfb938bc236f8295af2650c60cb807" },
   "nvim-test": { "branch": "main", "commit": "e06f3d029ee161f3ead6193cf27354d1eb8723c3" },
+  "nvim-toc": { "branch": "main", "commit": "afc27debc800129c50c5b870846ce1a5c9ce4479" },
   "nvim-treesitter": { "branch": "master", "commit": "e24dab6696aa2a6682a117e241adc32c38e93d53" },
   "nvim-treesitter-textobjects": { "branch": "master", "commit": "19a91a38b02c1c28c14e0ba468d20ae1423c39b2" },
   "obsidian.nvim": { "branch": "main", "commit": "b101ad8988eb1452dabb6138763877a1794a1966" },
