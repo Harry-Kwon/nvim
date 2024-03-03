@@ -159,24 +159,24 @@ require('lazy').setup({
 
         -- Actions
         -- visual mode
-        map('v', '<leader>hs', function()
+        map('v', '<leader>gs', function()
           gs.stage_hunk { vim.fn.line '.', vim.fn.line 'v' }
         end, { desc = 'stage git hunk' })
-        map('v', '<leader>hr', function()
+        map('v', '<leader>gr', function()
           gs.reset_hunk { vim.fn.line '.', vim.fn.line 'v' }
         end, { desc = 'reset git hunk' })
         -- normal mode
-        map('n', '<leader>hs', gs.stage_hunk, { desc = 'git stage hunk' })
-        map('n', '<leader>hr', gs.reset_hunk, { desc = 'git reset hunk' })
-        map('n', '<leader>hS', gs.stage_buffer, { desc = 'git Stage buffer' })
-        map('n', '<leader>hu', gs.undo_stage_hunk, { desc = 'undo stage hunk' })
-        map('n', '<leader>hR', gs.reset_buffer, { desc = 'git Reset buffer' })
-        map('n', '<leader>hp', gs.preview_hunk, { desc = 'preview git hunk' })
-        map('n', '<leader>hb', function()
+        map('n', '<leader>gs', gs.stage_hunk, { desc = 'git stage hunk' })
+        map('n', '<leader>gr', gs.reset_hunk, { desc = 'git reset hunk' })
+        map('n', '<leader>gS', gs.stage_buffer, { desc = 'git Stage buffer' })
+        map('n', '<leader>gu', gs.undo_stage_hunk, { desc = 'undo stage hunk' })
+        map('n', '<leader>gR', gs.reset_buffer, { desc = 'git Reset buffer' })
+        map('n', '<leader>gp', gs.preview_hunk, { desc = 'preview git hunk' })
+        map('n', '<leader>gb', function()
           gs.blame_line { full = false }
         end, { desc = 'git blame line' })
-        map('n', '<leader>hd', gs.diffthis, { desc = 'git diff against index' })
-        map('n', '<leader>hD', function()
+        map('n', '<leader>gd', gs.diffthis, { desc = 'git diff against index' })
+        map('n', '<leader>gD', function()
           gs.diffthis '~'
         end, { desc = 'git diff against last commit' })
 
@@ -563,8 +563,8 @@ end
 require('which-key').register {
   -- ['<leader>c'] = { name = '[C]ode', _ = 'which_key_ignore' },
   -- ['<leader>d'] = { name = '[D]ocument', _ = 'which_key_ignore' },
-  ['<leader>g'] = { name = '[G]it', _ = 'which_key_ignore' },
-  ['<leader>h'] = { name = 'Git [H]unk', _ = 'which_key_ignore' },
+  -- ['<leader>g'] = { name = '[G]it', _ = 'which_key_ignore' },
+  ['<leader>g'] = { name = '[G]it Hunk', _ = 'which_key_ignore' },
   ['gl'] = { name = '[G]o to [L]sp', _ = 'which_key_ignore' },
   -- ['<leader>r'] = { name = '[R]ename', _ = 'which_key_ignore' },
   ['<leader>s'] = { name = '[S]earch', _ = 'which_key_ignore' },
@@ -573,10 +573,10 @@ require('which-key').register {
   ['<leader>l'] = { name = '[L]SP', _ = 'which_key_ignore' },
 }
 -- register which-key VISUAL mode
--- required for visual <leader>hs (hunk stage) to work
+-- required for visual <leader>gs (hunk stage) to work
 require('which-key').register({
   ['<leader>'] = { name = 'VISUAL <leader>' },
-  ['<leader>h'] = { 'Git [H]unk' },
+  ['<leader>g'] = { '[G]it hunk' },
 }, { mode = 'v' })
 
 -- mason-lspconfig requires that these setup functions are called in this order
@@ -653,8 +653,10 @@ cmp.setup {
     completeopt = 'menu,menuone,noinsert',
   },
   mapping = cmp.mapping.preset.insert {
-    ['<C-n>'] = cmp.mapping.select_next_item() { behavior = cmp.SelectBehvaior.Insert },
-    ['<C-p>'] = cmp.mapping.select_prev_item() { behavior = cmp.SelectBehvaior.Insert },
+    ['<C-n>'] = cmp.mapping.select_next_item(),
+    -- { behavior = cmp.SelectBehavior.Insert },
+    ['<C-p>'] = cmp.mapping.select_prev_item(),
+    -- { behavior = cmp.SelectBehavior.Insert },
     ['<C-d>'] = cmp.mapping.scroll_docs(-4),
     ['<C-f>'] = cmp.mapping.scroll_docs(4),
     ['<C-e>'] = cmp.mapping.abort(),

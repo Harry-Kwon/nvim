@@ -37,4 +37,9 @@ return {
         build = function() vim.fn["mkdp#util#install"]() end,
     },
     -- 'bullets-vim/bullets.vim',
+    {
+        "ThePrimeagen/harpoon",
+        branch = "harpoon2",
+        dependencies = { "nvim-lua/plenary.nvim" }
+    }
 }
