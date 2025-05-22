@@ -109,7 +109,7 @@ require('lazy').setup {
       'hrsh7th/cmp-path',
 
       -- Adds a number of user-friendly snippets
-      'rafamadriz/friendly-snippets',
+      -- 'rafamadriz/friendly-snippets',
     },
   },
 
@@ -595,24 +595,24 @@ require('mason-lspconfig').setup()
 --  If you want to override the default filetypes that your language server will attach to you can
 --  define the property 'filetypes' to the map in question.
 local servers = {
-  ['clang-format'] = {},
-  ['clangd'] = {},
-  ['cmake-language-server'] = {},
-  ['codelldb'] = {},
-  ['delve'] = {},
-  ['docker-compose-language-service'] = {},
-  ['dockerfile-language-server'] = {},
-  ['gopls'] = {},
-  ['marksman'] = {},
-  ['mdformat'] = {},
-  ['mypy'] = {},
-  ['prettier'] = {},
-  ['pyright'] = {},
-  ['ruff'] = {},
-  ['rust-analyzer'] = {},
-  ['tsserver'] = {},
-  ['html'] = { filetypes = { 'html', 'twig', 'hbs' } },
-  ['stylua'] = {},
+  -- ['clang-format'] = {},
+  -- ['clangd'] = {},
+  -- ['cmake-language-server'] = {},
+  -- ['codelldb'] = {},
+  -- ['delve'] = {},
+  -- ['docker-compose-language-service'] = {},
+  -- ['dockerfile-language-server'] = {},
+  -- ['gopls'] = {},
+  -- ['marksman'] = {},
+  -- ['mdformat'] = {},
+  -- ['mypy'] = {},
+  -- ['prettier'] = {},
+  -- ['pyright'] = {},
+  -- ['ruff'] = {},
+  -- ['rust-analyzer'] = {},
+  -- ['tsserver'] = {},
+  -- ['html'] = { filetypes = { 'html', 'twig', 'hbs' } },
+  -- ['stylua'] = {},
   lua_ls = {
     Lua = {
       workspace = { checkThirdParty = false },
@@ -629,6 +629,7 @@ require('neodev').setup()
 -- nvim-cmp supports additional completion capabilities, so broadcast that to servers
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
+
 
 -- Ensure the servers above are installed
 local mason_lspconfig = require 'mason-lspconfig'
@@ -665,6 +666,7 @@ cmp.setup {
   },
   completion = {
     completeopt = 'menu,menuone,noinsert',
+    autocomplete = false
   },
   mapping = cmp.mapping.preset.insert {
     ['<C-d>'] = cmp.mapping.scroll_docs(-4),

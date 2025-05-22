@@ -97,3 +97,31 @@ nmap('<leader>qh', '<cmd>cprev<cr>', 'Previous Quickfix')
 nmap('<leader>ql', '<cmd>cnext<cr>', 'Next Quickfix')
 nmap('<leader>qk', '<cmd>cnext<cr>', 'Quickfix Above')
 nmap('<leader>qj', '<cmd>cnext<cr>', 'Quickfix Below')
+
+-- nmap('<leader>m', '<cmd>MarkdownPreviewToggle<cr>', "[M]arkdown Preview Toggle")
+wk.add({'<leader>m', group = '[M]olten'})
+
+vim.keymap.set("n", "<localleader>mI", ":MoltenInit<CR>",
+    { desc = "Initialize the plugin" })
+vim.keymap.set("n", "<localleader>mo", ":MoltenEvaluateOperator<CR>",
+    { desc = "run operator selection" })
+vim.keymap.set("n", "<localleader>ml", ":MoltenEvaluateLine<CR>",
+    { desc = "evaluate line" })
+vim.keymap.set("n", "<localleader>mc", ":MoltenReevaluateCell<CR>",
+    { desc = "re-evaluate cell" })
+vim.keymap.set("n", "<localleader>mA", ":MoltenReevaluateAll<CR>",
+    { desc = "re-evaluate all" })
+vim.keymap.set("v", "<localleader>mv", ":<C-u>MoltenEvaluateVisual<CR>gv",
+    { desc = "evaluate visual selection" })
+vim.keymap.set("n", "<localleader>md", ":MoltenDelete<CR>",
+    { desc = "molten delete cell" })
+vim.keymap.set("n", "<localleader>mh", ":MoltenHideOutput<CR>",
+    { desc = "hide output" })
+vim.keymap.set("n", "<localleader>mk", ":noautocmd MoltenEnterOutput<CR>",
+    { desc = "show/enter output" })
+vim.keymap.set("n", "<localleader>mj", ":MoltenNext<CR>",
+    { desc = "next cell" })
+vim.keymap.set("n", "<localleader>mk", ":MoltenPrev<CR>",
+    { desc = "prev cell" })
+vim.keymap.set("n", "<localleader>mi", ":MoltenImagePopup<CR>",
+    { desc = "image popup" })

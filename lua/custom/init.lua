@@ -21,3 +21,5 @@ require("conform").setup({
     },
 })
 require("oil").setup()
+
+vim.g.molten_image_provider = "image.nvim"
