@@ -40,7 +40,7 @@ P.S. You can delete this when you're done too. It's your config now :)
 -- Set <space> as the leader key
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are required (otherwise wrong leader will be used)
-vim.cmd.source("~/.vimrc")
+vim.cmd.source '~/.vimrc'
 
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
@@ -67,7 +67,7 @@ vim.opt.rtp:prepend(lazypath)
 --
 --  You can also configure plugins after the setup call,
 --    as they will be available in your neovim runtime.
-require('lazy').setup({
+require('lazy').setup {
   -- NOTE: First, some plugins that don't require any configuration
 
   -- Git related plugins
@@ -89,7 +89,7 @@ require('lazy').setup({
 
       -- Useful status updates for LSP
       -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-      { 'j-hui/fidget.nvim',       opts = {} },
+      { 'j-hui/fidget.nvim', opts = {} },
 
       -- Additional lua configuration, makes nvim stuff amazing!
       'folke/neodev.nvim',
@@ -114,7 +114,9 @@ require('lazy').setup({
   },
 
   -- Useful plugin to show you pending keybinds.
-  { 'folke/which-key.nvim', opts = {} },
+  { 'folke/which-key.nvim', opts = {}, dependencies = {
+    'nvim-tree/nvim-web-devicons',
+  } },
   {
     -- Adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
@@ -203,7 +205,7 @@ require('lazy').setup({
   --     require('onedark').load()
   --   end,
   -- },
-  { "catppuccin/nvim",      name = "catppuccin", priority = 1000 },
+  { 'catppuccin/nvim', name = 'catppuccin', priority = 1000 },
 
   {
     -- Set lualine as statusline
@@ -229,7 +231,7 @@ require('lazy').setup({
   },
 
   -- "gc" to comment visual regions/lines
-  { 'numToStr/Comment.nvim',  opts = {} },
+  { 'numToStr/Comment.nvim', opts = {} },
 
   -- Fuzzy Finder (files, lsp, etc)
   {
@@ -274,10 +276,10 @@ require('lazy').setup({
   --
   --    For additional information see: https://github.com/folke/lazy.nvim#-structuring-your-plugins
   { import = 'custom.plugins' },
-}, {})
+}
 
 -- [[ set colorscheme ]]
-vim.cmd.colorscheme "catppuccin"
+vim.cmd.colorscheme 'catppuccin'
 
 -- [[ Setting options ]]
 -- See `:help vim.o`
@@ -339,7 +341,11 @@ vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = tr
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous diagnostic message' })
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next diagnostic message' })
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Open floating diagnostic message' })
-vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostics list' })
+local wk = require 'which-key'
+wk.add {
+  { '<leader>q', group = '[Q]uickfix' },
+}
+vim.keymap.set('n', '<leader>qd', vim.diagnostic.setloclist, { desc = 'Open diagnostics list' })
 
 -- [[ Highlight on yank ]]
 -- See `:help vim.highlight.on_yank()`
@@ -444,8 +450,7 @@ vim.keymap.set('n', '<leader>st', require('telescope.builtin').treesitter, { des
 vim.defer_fn(function()
   require('nvim-treesitter.configs').setup {
     -- Add languages to be installed here that you want installed for treesitter
-    ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim',
-      'bash' },
+    ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim', 'bash' },
 
     -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
     auto_install = false,
@@ -556,31 +561,26 @@ local on_attach = function(_, bufnr)
 
   -- Create a command `:Format` local to the LSP buffer
   vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
-    require("conform").format({ bufnr = bufnr })
+    require('conform').format { bufnr = bufnr }
     -- vim.lsp.buf.format()
   end, { desc = 'Format current buffer with LSP' })
 end
 
 -- document existing key chains
-require('which-key').register {
-  -- ['<leader>c'] = { name = '[C]ode', _ = 'which_key_ignore' },
-  -- ['<leader>d'] = { name = '[D]ocument', _ = 'which_key_ignore' },
-  -- ['<leader>g'] = { name = '[G]it', _ = 'which_key_ignore' },
-  ['<leader>g'] = { name = '[G]it Hunk', _ = 'which_key_ignore' },
-  ['gl'] = { name = '[G]o to [L]sp', _ = 'which_key_ignore' },
-  -- ['<leader>r'] = { name = '[R]ename', _ = 'which_key_ignore' },
-  ['<leader>s'] = { name = '[S]earch', _ = 'which_key_ignore' },
-  ['<leader>t'] = { name = '[T]oggle', _ = 'which_key_ignore' },
-  ['<leader>w'] = { name = '[W]orkspace', _ = 'which_key_ignore' },
-  ['<leader>l'] = { name = '[L]SP', _ = 'which_key_ignore' },
+require('which-key').add {
+  { '<leader>g', group = '[G]it Hunk' },
+  { '<leader>t', group = '[T]oggle' },
+  { '<leader>w', group = '[W]orkspace' },
+  { '<leader>s', group = '[S]earch' },
+  { '<leader>l', group = '[L]SP' },
+  { '<leader>gl', group = '[G]o to [L]sp' },
 }
 -- register which-key VISUAL mode
 -- required for visual <leader>gs (hunk stage) to work
-require('which-key').register({
-  ['<leader>'] = { name = 'VISUAL <leader>' },
-  ['<leader>g'] = { '[G]it hunk' },
-}, { mode = 'v' })
-
+require('which-key').add {
+  { '<leader>', group = 'VISUAL <leader>', mode = 'v' },
+  { '<leader>g', group = '[G]it Hunk', mode = 'v' },
+}
 -- mason-lspconfig requires that these setup functions are called in this order
 -- before setting up the servers.
 require('mason').setup()
@@ -595,13 +595,24 @@ require('mason-lspconfig').setup()
 --  If you want to override the default filetypes that your language server will attach to you can
 --  define the property 'filetypes' to the map in question.
 local servers = {
-  -- clangd = {},
-  -- gopls = {},
-  -- pyright = {},
-  -- rust_analyzer = {},
-  -- tsserver = {},
-  -- html = { filetypes = { 'html', 'twig', 'hbs'} },
-
+  ['clang-format'] = {},
+  ['clangd'] = {},
+  ['cmake-language-server'] = {},
+  ['codelldb'] = {},
+  ['delve'] = {},
+  ['docker-compose-language-service'] = {},
+  ['dockerfile-language-server'] = {},
+  ['gopls'] = {},
+  ['marksman'] = {},
+  ['mdformat'] = {},
+  ['mypy'] = {},
+  ['prettier'] = {},
+  ['pyright'] = {},
+  ['ruff'] = {},
+  ['rust-analyzer'] = {},
+  ['tsserver'] = {},
+  ['html'] = { filetypes = { 'html', 'twig', 'hbs' } },
+  ['stylua'] = {},
   lua_ls = {
     Lua = {
       workspace = { checkThirdParty = false },
@@ -624,6 +635,7 @@ local mason_lspconfig = require 'mason-lspconfig'
 
 mason_lspconfig.setup {
   ensure_installed = vim.tbl_keys(servers),
+  automatic_installation = true,
 }
 
 mason_lspconfig.setup_handlers {
@@ -655,42 +667,21 @@ cmp.setup {
     completeopt = 'menu,menuone,noinsert',
   },
   mapping = cmp.mapping.preset.insert {
-    ['<C-n>'] = cmp.mapping.select_next_item(),
-    -- { behavior = cmp.SelectBehavior.Insert },
-    ['<C-p>'] = cmp.mapping.select_prev_item(),
-    -- { behavior = cmp.SelectBehavior.Insert },
     ['<C-d>'] = cmp.mapping.scroll_docs(-4),
     ['<C-f>'] = cmp.mapping.scroll_docs(4),
     ['<C-e>'] = cmp.mapping.abort(),
     ['<C-y>'] = cmp.mapping(
       cmp.mapping.confirm {
         behavior = cmp.ConfirmBehavior.Insert,
-        select = true
+        select = true,
       },
-      { 'i', 's' }),
-    -- ['<C-Space>'] = cmp.mapping.complete {},
+      { 'i', 's' }
+    ),
+    ['<C-Space>'] = cmp.mapping.complete {},
     -- ['<CR>'] = cmp.mapping.confirm {
     --   behavior = cmp.ConfirmBehavior.,
     --   select = true,
     -- },
-    -- ['<Tab>'] = cmp.mapping(function(fallback)
-    --   if cmp.visible() then
-    --     cmp.select_next_item()
-    --   elseif luasnip.expand_or_locally_jumpable() then
-    --     luasnip.expand_or_jump()
-    --   else
-    --     fallback()
-    --   end
-    -- end, { 'i', 's' }),
-    -- ['<S-Tab>'] = cmp.mapping(function(fallback)
-    --   if cmp.visible() then
-    --     cmp.select_prev_item()
-    --   elseif luasnip.locally_jumpable(-1) then
-    --     luasnip.jump(-1)
-    --   else
-    --     fallback()
-    --   end
-    -- end, { 'i', 's' }),
     ['<C-n>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_next_item()
@@ -717,9 +708,9 @@ cmp.setup {
   },
 }
 
-require('custom')
-require('custom.remaps')
-require('custom.debug')
+require 'custom'
+require 'custom.remaps'
+require 'custom.debug'
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et

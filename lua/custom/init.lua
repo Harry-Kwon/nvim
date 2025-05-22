@@ -1,5 +1,6 @@
 vim.opt.conceallevel = 0
 vim.opt.termguicolors = true
+vim.opt.ruler = true
 
 vim.diagnostic.config({
     virtual_text = false,
@@ -19,3 +20,4 @@ require("conform").setup({
         javascript = { "prettierd", "prettier", stop_after_first = true },
     },
 })
+require("oil").setup()

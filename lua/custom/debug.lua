@@ -41,3 +41,22 @@ for _, language in ipairs({ 'typescript', 'javascript' }) do
         }
     }
 end
+
+require('mason-nvim-dap').setup {
+    automatic_installation = true,
+
+    handlers = {},
+
+    ensure_installed = {
+        'codelldb'
+    }
+}
+--
+-- dap.configurations.rust = {
+--     {
+--         name = "Rust debug",
+--         type = "codelldb",
+--         request = "launch",
+--
+--     }
+-- }
