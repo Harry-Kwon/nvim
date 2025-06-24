@@ -7,7 +7,8 @@ end
 -- navigate file tree
 -- nmap('<leader>p', vim.cmd.Ex, 'netrw explorer')
 local oil = require 'oil'
-nmap('<leader>p', '<cmd>Oil<cr>', 'netrw explorer')
+nmap('<leader>p', '<cmd>Oil<cr>', 'Oil explorerer')
+nmap('<leader>P', vim.cmd.Ex, 'netrw explorer')
 
 local nvim_test = require 'nvim-test'
 wk.add {
@@ -78,15 +79,15 @@ local function toggle_telescope(harpoon_files)
   end
 
   require('telescope.pickers')
-    .new({}, {
-      prompt_title = 'Harpoon',
-      finder = require('telescope.finders').new_table {
-        results = file_paths,
-      },
-      previewer = conf.file_previewer {},
-      sorter = conf.generic_sorter {},
-    })
-    :find()
+      .new({}, {
+        prompt_title = 'Harpoon',
+        finder = require('telescope.finders').new_table {
+          results = file_paths,
+        },
+        previewer = conf.file_previewer {},
+        sorter = conf.generic_sorter {},
+      })
+      :find()
 end
 
 vim.keymap.set('n', '<leader>hw', function()
@@ -97,3 +98,74 @@ nmap('<leader>qh', '<cmd>cprev<cr>', 'Previous Quickfix')
 nmap('<leader>ql', '<cmd>cnext<cr>', 'Next Quickfix')
 nmap('<leader>qk', '<cmd>cnext<cr>', 'Quickfix Above')
 nmap('<leader>qj', '<cmd>cnext<cr>', 'Quickfix Below')
+
+-- nmap('<leader>m', '<cmd>MarkdownPreviewToggle<cr>', "[M]arkdown Preview Toggle")
+wk.add({ '<leader>m', group = '[M]olten' })
+
+vim.keymap.set("n", "<localleader>mI", ":MoltenInit<CR>",
+  { desc = "Initialize the plugin" })
+vim.keymap.set("n", "<localleader>mo", ":MoltenEvaluateOperator<CR>",
+  { desc = "run operator selection" })
+vim.keymap.set("n", "<localleader>ml", ":MoltenEvaluateLine<CR>",
+  { desc = "evaluate line" })
+vim.keymap.set("n", "<localleader>mc", ":MoltenReevaluateCell<CR>",
+  { desc = "re-evaluate cell" })
+vim.keymap.set("n", "<localleader>mA", ":MoltenReevaluateAll<CR>",
+  { desc = "re-evaluate all" })
+vim.keymap.set("v", "<localleader>mv", ":<C-u>MoltenEvaluateVisual<CR>gv",
+  { desc = "evaluate visual selection" })
+vim.keymap.set("n", "<localleader>md", ":MoltenDelete<CR>",
+  { desc = "molten delete cell" })
+vim.keymap.set("n", "<localleader>mh", ":MoltenHideOutput<CR>",
+  { desc = "hide output" })
+vim.keymap.set("n", "<localleader>mk", ":noautocmd MoltenEnterOutput<CR>",
+  { desc = "show/enter output" })
+vim.keymap.set("n", "<localleader>mj", ":MoltenNext<CR>",
+  { desc = "next cell" })
+vim.keymap.set("n", "<localleader>mk", ":MoltenPrev<CR>",
+  { desc = "prev cell" })
+vim.keymap.set("n", "<localleader>mi", ":MoltenImagePopup<CR>",
+  { desc = "image popup" })
+
+local dap_python = require("dap-python")
+
+wk.add({ "<leader>d", group = "[D]ebug" })
+vim.keymap.set("n", "<leader>dm", function()
+    dap_python.test_method()
+  end,
+  { desc = "debug test method" }
+)
+vim.keymap.set("n", "<leader>dc", function()
+    dap_python.test_class()
+  end,
+  { desc = "debug test class" }
+)
+vim.keymap.set("v", "<leader>ds", function()
+    dap_python.debug_selection()
+  end,
+  { desc = "debug selection" }
+)
+-- nnoremap <silent> <leader>dn :lua require('dap-python').test_method()<CR>
+-- nnoremap <silent> <leader>df :lua require('dap-python').test_class()<CR>
+-- vnoremap <silent> <leader>ds <ESC>:lua require('dap-python').debug_selection()<CR>
+
+local quarto_runner = require("quarto.runner")
+vim.keymap.set("n", "<localleader>mrc", quarto_runner.run_cell, { desc = "run cell", silent = true })
+vim.keymap.set("n", "<localleader>mra", quarto_runner.run_above, { desc = "run cell and above", silent = true })
+vim.keymap.set("n", "<localleader>mrA", quarto_runner.run_all, { desc = "run all cells", silent = true })
+vim.keymap.set("n", "<localleader>mrl", quarto_runner.run_line, { desc = "run line", silent = true })
+vim.keymap.set("v", "<localleader>mr", quarto_runner.run_range, { desc = "run visual range", silent = true })
+vim.keymap.set("n", "<localleader>mRA", function()
+  quarto_runner.run_all(true)
+end, { desc = "run all cells of all languages", silent = true })
+
+
+local copilot_panel = require("copilot.panel")
+vim.keymap.set("n",
+  "<localleader>cpt",
+  ":Copilot panel toggle",
+  {
+    desc = "Copilot toggle panel",
+    silent = true
+  }
+)

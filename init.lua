@@ -109,7 +109,7 @@ require('lazy').setup {
       'hrsh7th/cmp-path',
 
       -- Adds a number of user-friendly snippets
-      'rafamadriz/friendly-snippets',
+      -- 'rafamadriz/friendly-snippets',
     },
   },
 
@@ -362,6 +362,7 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 -- See `:help telescope` and `:help telescope.setup()`
 require('telescope').setup {
   defaults = {
+    file_ignore_patterns = { "^snippets/" },
     mappings = {
       i = {
         ['<C-u>'] = false,
@@ -559,12 +560,20 @@ local on_attach = function(_, bufnr)
     print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
   end, '[W]orkspace [L]ist Folders')
 
-  -- Create a command `:Format` local to the LSP buffer
-  vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
-    require('conform').format { bufnr = bufnr }
-    -- vim.lsp.buf.format()
-  end, { desc = 'Format current buffer with LSP' })
+  -- 20250609 moved this to outside this block so formatters work when lsp isn't attached (json, html)
+  -- -- Create a command `:Format` local to the LSP buffer
+  -- vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
+  --   require('conform').format { bufnr = bufnr, opts = { lsp_format="fallback" } }
+  --   -- vim.lsp.buf.format()
+  -- end, { desc = 'Format current buffer with LSP' })
 end
+
+-- 20250609 moved this to outside this block so formatters work when lsp isn't attached (json, html)
+-- Create a command `:Format` local to the LSP buffer
+vim.api.nvim_create_user_command('Format', function(_)
+  require('conform').format {}
+  -- vim.lsp.buf.format()
+end, { desc = 'Format current buffer with LSP' })
 
 -- document existing key chains
 require('which-key').add {
@@ -595,24 +604,24 @@ require('mason-lspconfig').setup()
 --  If you want to override the default filetypes that your language server will attach to you can
 --  define the property 'filetypes' to the map in question.
 local servers = {
-  ['clang-format'] = {},
-  ['clangd'] = {},
-  ['cmake-language-server'] = {},
-  ['codelldb'] = {},
-  ['delve'] = {},
-  ['docker-compose-language-service'] = {},
-  ['dockerfile-language-server'] = {},
-  ['gopls'] = {},
-  ['marksman'] = {},
-  ['mdformat'] = {},
-  ['mypy'] = {},
-  ['prettier'] = {},
-  ['pyright'] = {},
-  ['ruff'] = {},
-  ['rust-analyzer'] = {},
-  ['tsserver'] = {},
-  ['html'] = { filetypes = { 'html', 'twig', 'hbs' } },
-  ['stylua'] = {},
+  -- ['clang-format'] = {},
+  -- ['clangd'] = {},
+  -- ['cmake-language-server'] = {},
+  -- ['codelldb'] = {},
+  -- ['delve'] = {},
+  -- ['docker-compose-language-service'] = {},
+  -- ['dockerfile-language-server'] = {},
+  -- ['gopls'] = {},
+  -- ['marksman'] = {},
+  -- ['mdformat'] = {},
+  -- ['mypy'] = {},
+  -- ['prettier'] = {},
+  -- ['pyright'] = {},
+  -- ['ruff'] = {},
+  -- ['rust-analyzer'] = {},
+  -- ['tsserver'] = {},
+  -- ['html'] = { filetypes = { 'html', 'twig', 'hbs' } },
+  -- ['stylua'] = {},
   lua_ls = {
     Lua = {
       workspace = { checkThirdParty = false },
@@ -620,7 +629,7 @@ local servers = {
       -- NOTE: toggle below to ignore Lua_LS's noisy `missing-fields` warnings
       -- diagnostics = { disable = { 'missing-fields' } },
     },
-  },
+  }
 }
 
 -- Setup neovim lua configuration
@@ -630,6 +639,7 @@ require('neodev').setup()
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
+
 -- Ensure the servers above are installed
 local mason_lspconfig = require 'mason-lspconfig'
 
@@ -638,16 +648,18 @@ mason_lspconfig.setup {
   automatic_installation = true,
 }
 
-mason_lspconfig.setup_handlers {
-  function(server_name)
-    require('lspconfig')[server_name].setup {
-      capabilities = capabilities,
-      on_attach = on_attach,
-      settings = servers[server_name],
-      filetypes = (servers[server_name] or {}).filetypes,
-    }
-  end,
-}
+-- deprecated with mason 2.0
+-- https://github.com/mason-org/mason-lspconfig.nvim/releases/tag/v2.0.0
+-- mason_lspconfig.setup_handlers {
+--   function(server_name)
+--     require('lspconfig')[server_name].setup {
+--       capabilities = capabilities,
+--       on_attach = on_attach,
+--       settings = servers[server_name],
+--       filetypes = (servers[server_name] or {}).filetypes,
+--     }
+--   end,
+-- }
 
 -- [[ Configure nvim-cmp ]]
 -- See `:help cmp`
@@ -670,6 +682,13 @@ cmp.setup {
     ['<C-d>'] = cmp.mapping.scroll_docs(-4),
     ['<C-f>'] = cmp.mapping.scroll_docs(4),
     ['<C-e>'] = cmp.mapping.abort(),
+    ['<tab>'] = cmp.mapping(
+      cmp.mapping.confirm {
+        behavior = cmp.ConfirmBehavior.Insert,
+        select = true,
+      },
+      { 'i', 's' }
+    ),
     ['<C-y>'] = cmp.mapping(
       cmp.mapping.confirm {
         behavior = cmp.ConfirmBehavior.Insert,
@@ -711,6 +730,7 @@ cmp.setup {
 require 'custom'
 require 'custom.remaps'
 require 'custom.debug'
+
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et

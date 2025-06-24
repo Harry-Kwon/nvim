@@ -48,7 +48,9 @@ require('mason-nvim-dap').setup {
     handlers = {},
 
     ensure_installed = {
-        'codelldb'
+        'codelldb',
+        'delve',
+        'debugpy'
     }
 }
 --
@@ -60,3 +62,13 @@ require('mason-nvim-dap').setup {
 --
 --     }
 -- }
+--
+require("dap-python").setup("uv")
+require("dap-python").test_runner = "pytest"
+table.insert(require('dap').configurations.python, {
+  type = 'python',
+  request = 'launch',
+  name = 'My custom launch configuration',
+  program = '${file}',
+  -- ... more options, see https://github.com/microsoft/debugpy/wiki/Debug-configuration-settings
+})
