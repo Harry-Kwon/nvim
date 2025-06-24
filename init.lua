@@ -616,8 +616,8 @@ local servers = {
   -- ['mdformat'] = {},
   -- ['mypy'] = {},
   -- ['prettier'] = {},
-  -- ['pyright'] = {},
-  -- ['ruff'] = {},
+  ['pyright'] = {},
+  ['ruff'] = {},
   -- ['rust-analyzer'] = {},
   -- ['tsserver'] = {},
   -- ['html'] = { filetypes = { 'html', 'twig', 'hbs' } },
@@ -650,16 +650,23 @@ mason_lspconfig.setup {
 
 -- deprecated with mason 2.0
 -- https://github.com/mason-org/mason-lspconfig.nvim/releases/tag/v2.0.0
--- mason_lspconfig.setup_handlers {
---   function(server_name)
---     require('lspconfig')[server_name].setup {
---       capabilities = capabilities,
---       on_attach = on_attach,
---       settings = servers[server_name],
---       filetypes = (servers[server_name] or {}).filetypes,
---     }
---   end,
--- }
+--
+vim.lsp.config('*',
+    {
+      capabilities = capabilities,
+      on_attach = on_attach,
+      -- settings = servers[server_name],
+      -- filetypes = (servers[server_name] or {}).filetypes,
+    }
+)
+vim.lsp.config('lua_ls', {
+    Lua = {
+      workspace = { checkThirdParty = false },
+      telemetry = { enable = false },
+      -- NOTE: toggle below to ignore Lua_LS's noisy `missing-fields` warnings
+      -- diagnostics = { disable = { 'missing-fields' } },
+    },
+})
 
 -- [[ Configure nvim-cmp ]]
 -- See `:help cmp`
